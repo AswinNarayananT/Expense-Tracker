@@ -1,0 +1,57 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+.env/
+.venv/
+
+# Environment variables
+*.env
+.env.*
+
+# Alembic migration artifacts
+alembic/versions/*.pyc
+alembic/versions/__pycache__/
+# keep versions folder, but ignore cache
+!alembic/
+!alembic/versions/
+alembic/versions/*.py
+
+# SQLite (if used locally)
+*.db
+*.sqlite3
+
+# VSCode / PyCharm / Editors
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Coverage / test reports
+htmlcov/
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.tox/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# FastAPI + Uvicorn reload cache
+*.pid
+
+# Dist / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
