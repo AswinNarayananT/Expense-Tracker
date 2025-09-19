@@ -10,8 +10,8 @@ class UserCreate(BaseModel):
     salary: Optional[float] = 0.0
 
 class UserOUt(BaseModel):
-    username: str
-    salary:float
+    name: str
+    password:float
 
     
 

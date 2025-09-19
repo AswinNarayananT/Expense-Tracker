@@ -1,42 +1,34 @@
-from sqlalchemy import column,integer, String,Enum as SAEnum, Float,Integer,ForeignKey,DateTime
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, Enum as SAEnum
 from sqlalchemy.orm import relationship
-import enum
+from .database import Base
 from datetime import datetime, timezone
+import enum
 
-
-from database import Base
-
-class Category(enum.Enum):
-    Food ="food"
-    Entertainment = "Entertainmaent"
+class CategoryEnum(str, enum.Enum):
+    Food ="Food"
+    Entertainment = "Entertainment"
     Transport ="Transport"
     Utilities ="Utilities"
     Other ="Other"
 
-
-
-
-
 class User(Base):
     __tablename__ = "users"
-    user_id = column(Integer, primary_key=True, index=True,auto_increment=True)
-    username = column(String,index=True, nullable=True)
-    salary = column(Float,nullable=True)
 
-    expense =relationship("users", foreign_keys="Expenses.id",back_populates="user")
+    user_id = Column(Integer, primary_key=True, index=True,autoincrement=True)
+    username = Column(String(150), unique=True, nullable=False, index=True)
+    salary = Column(Float, default=0.0, nullable=False)
+    hashed_password = Column(String(256), nullable=False)
 
+    expenses = relationship("Expense", back_populates="user", cascade="all, delete-orphan")
 
+class Expense(Base):
+    __tablename__ = "expenses"
 
+    expense_id  = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False, index=True)
+    name = Column(String(200), nullable=False)
+    amount = Column(Float, nullable=False)
+    category = Column(SAEnum(CategoryEnum), nullable=False)
+    created_at = Column(DateTime, default=datetime.now(timezone.utc), nullable=False)
 
-class Expenses(Base):
-    __tablename__ = "expense"
-
-    expense_id  =column(Integer,primary_key=True, auto_increment=True)
-    user_id =column(Integer,ForeignKey("Users.user_id"))
-    name =column(str,nullable=True)
-    amount = column(Float,nullable=True)
-    category = column(String,SAEnum(Category))
-    created_at =column(DateTime,default=datetime.now(timezone.utc))
-
-    user =relationship("expense",foreign_keys=["expense_id"],back_populates="expenses")
+    user = relationship("User", back_populates="expenses")
